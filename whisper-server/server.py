@@ -3,9 +3,9 @@
 Whisper Transcription Server
 
 A simple HTTP server that accepts audio files and returns transcribed text
-using faster-whisper (GPU accelerated).
+using faster-whisper (CPU mode for machines without a dedicated GPU).
 
-Run on your 3060 machine, accessible over Tailscale.
+Run locally on this machine.
 
 Usage:
     pip install faster-whisper flask
@@ -71,9 +71,9 @@ app = Flask(__name__)
 # Load model once at startup
 # Options: "tiny", "base", "small", "medium", "large-v2", "large-v3", "turbo"
 # "turbo" (large-v3-turbo) is 6x faster than large-v3 with nearly same accuracy
-MODEL_SIZE = os.environ.get("WHISPER_MODEL", "turbo")
-DEVICE = os.environ.get("WHISPER_DEVICE", "cuda")  # "cuda" or "cpu"
-COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE", "float16")  # float16 for GPU
+MODEL_SIZE = os.environ.get("WHISPER_MODEL", "base")
+DEVICE = os.environ.get("WHISPER_DEVICE", "cpu")  # "cuda" or "cpu"
+COMPUTE_TYPE = os.environ.get("WHISPER_COMPUTE", "int8")  # int8 for CPU, float16 for GPU
 
 logger.info(f"Loading Whisper model: {MODEL_SIZE} on {DEVICE} with compute_type={COMPUTE_TYPE}...")
 model = WhisperModel(MODEL_SIZE, device=DEVICE, compute_type=COMPUTE_TYPE)
